@@ -1,0 +1,43 @@
+<html>
+<h1>Pay with Paypal</h1>
+<script src="https://www.paypalobjects.com/api/checkout.js"></script>
+
+<div id="paypal-button"></div>
+
+<script>
+    //change your APIs with these
+    const crateSourceAPI = "http://localhost:3000/createSource";
+    const executePayAPI = "http://localhost:3000/executePay";
+    /**********************APIs End **************************/
+
+    paypal.Button.render({
+        env: 'sandbox', // Or 'production'
+        // Set up the payment:
+        // 1. Add a payment callback
+        payment: function(data, actions) {
+            // 2. Make a request to your server
+            return actions.request.post(crateSourceAPI)
+                .then(function(res) {
+                    console.log(res);
+                    return res.id;
+                });
+        },
+        // Execute the payment:
+        // 1. Add an onAuthorize callback
+        onAuthorize: function(data, actions) {
+            console.log(data, "data");
+            // 2. Make a request to your server
+            return actions.request.post("http://localhost:3000/executePay", {
+                    paymentID: data.paymentID,
+                    payerID: data.payerID
+                })
+                .then(function(res) {
+                    console.log(res);
+                    alert("Payment success!");
+                    // 3. Show the buyer a confirmation message.
+                });
+        }
+    }, '#paypal-button');
+</script>
+
+</html>
