@@ -4,8 +4,8 @@ const app = express();
 const PORT = 3000;
 var paypal = require('paypal-rest-sdk');
 
-const ClientID = "AZtCEjlNFsR7sagb40kBOr-K61purCS5n6kAHnhCOEAHwt3G24ZfJYYQTbIiKRdilkfYAriQsY5y8PbJ";
-const Secret = "EOF0JxedgHtLy4xzSEk_ZX51lTqOgjmB-mGrQQ5LAtqBO4FuE1B5VPbmLR01akKaXrV6wFdrFjIRDENS"
+const ClientID = "XXXXXXXXXXXXXXXX";
+const Secret = "XXXXXXXXXXXXXXXX";
 
 //configure paypal
 paypal.configure({
