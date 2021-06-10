@@ -3,9 +3,11 @@ const path = require("path");
 const app = express();
 const PORT = 3000;
 var paypal = require('paypal-rest-sdk');
+const axios = require('axios').default;
 
-const ClientID = "XXXXXXXXXXXXXXXX";
-const Secret = "XXXXXXXXXXXXXXXX";
+const ClientID = "AZtCEjlNFsR7sagb40kBOr-K61purCS5n6kAHnhCOEAHwt3G24ZfJYYQTbIiKRdilkfYAriQsY5y8PbJ";
+const Secret = "EOF0JxedgHtLy4xzSEk_ZX51lTqOgjmB-mGrQQ5LAtqBO4FuE1B5VPbmLR01akKaXrV6wFdrFjIRDENS"
+const Access_Token = "access_token$sandbox$j5fymcwkftf5twnq$97144f57d3895ee792795970c8b71039";
 
 //configure paypal
 paypal.configure({
@@ -28,6 +30,9 @@ app.get('/payment-page', (req, res) => {
     return res.sendFile(path.resolve("payment.html"));
 });
 
+app.get('/subscription', (req, res) => {
+    return res.sendFile(path.resolve("recurring.html"));
+})
 
 //example json req for creating source
 var create_payment_json = {
@@ -88,6 +93,135 @@ app.post('/executePay', (req, res) => {
             return res.json(payment);
         }
     });
+})
+
+
+//recurring
+app.get('/create-product', (req, res) => {
+    var data = JSON.stringify({
+        "name": "Video Streaming Service",
+        "description": "Video streaming service",
+        "type": "SERVICE",
+        "category": "SOFTWARE",
+        "image_url": "https://example.com/streaming.jpg",
+        "home_url": "https://example.com/home"
+    });
+
+    var config = {
+        method: 'post',
+        url: 'https://api.sandbox.paypal.com/v1/catalogs/products',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        auth: {
+            username: ClientID,
+            password: Secret
+        },
+        data: data
+    };
+
+    axios(config)
+        .then(function(response) {
+            // console.log(JSON.stringify(response.data));
+            return res.json(response.data);
+        })
+        .catch(function(error) {
+            // console.log(error);
+            return res.json(error);
+        });
+});
+
+app.get('/create-plan', (req, res) => {
+    var data = JSON.stringify({
+        "product_id": "PROD-8WC027174L363212V",
+        "name": "Basic Plan",
+        "description": "Basic plan",
+        "billing_cycles": [{
+                "frequency": {
+                    "interval_unit": "MONTH",
+                    "interval_count": 1
+                },
+                "tenure_type": "TRIAL",
+                "sequence": 1,
+                "total_cycles": 1
+            },
+            {
+                "frequency": {
+                    "interval_unit": "MONTH",
+                    "interval_count": 1
+                },
+                "tenure_type": "REGULAR",
+                "sequence": 2,
+                "total_cycles": 12,
+                "pricing_scheme": {
+                    "fixed_price": {
+                        "value": "10",
+                        "currency_code": "USD"
+                    }
+                }
+            }
+        ],
+        "payment_preferences": {
+            "auto_bill_outstanding": true,
+            "setup_fee": {
+                "value": "10",
+                "currency_code": "USD"
+            },
+            "setup_fee_failure_action": "CONTINUE",
+            "payment_failure_threshold": 3
+        },
+        "taxes": {
+            "percentage": "10",
+            "inclusive": false
+        }
+    });
+
+    var config = {
+        method: 'post',
+        url: 'https://api.sandbox.paypal.com/v1/billing/plans',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        auth: {
+            username: ClientID,
+            password: Secret
+        },
+        data: data
+    };
+
+    axios(config)
+        .then(function(response) {
+            // console.log(JSON.stringify(response.data));
+            return res.json(response.data);
+        })
+        .catch(function(error) {
+            // console.log(error);
+            return res.json(error);
+        });
+});
+
+app.get('/products', (req, res) => {
+    var config = {
+        method: 'get',
+        url: 'https://api.sandbox.paypal.com/v1/catalogs/products',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        auth: {
+            username: ClientID,
+            password: Secret
+        },
+    };
+
+    axios(config)
+        .then(function(response) {
+            // console.log(JSON.stringify(response.data));
+            return res.json(response.data);
+        })
+        .catch(function(error) {
+            // console.log(error);
+            return res.json(error);
+        });
 })
 
 
