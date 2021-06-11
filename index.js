@@ -5,9 +5,9 @@ const PORT = 3000;
 var paypal = require('paypal-rest-sdk');
 const axios = require('axios').default;
 
-const ClientID = "AZtCEjlNFsR7sagb40kBOr-K61purCS5n6kAHnhCOEAHwt3G24ZfJYYQTbIiKRdilkfYAriQsY5y8PbJ";
-const Secret = "EOF0JxedgHtLy4xzSEk_ZX51lTqOgjmB-mGrQQ5LAtqBO4FuE1B5VPbmLR01akKaXrV6wFdrFjIRDENS"
-const Access_Token = "access_token$sandbox$j5fymcwkftf5twnq$97144f57d3895ee792795970c8b71039";
+const ClientID = "";
+const Secret = ""
+const Access_Token = "";
 
 //configure paypal
 paypal.configure({
