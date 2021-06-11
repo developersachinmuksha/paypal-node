@@ -8,7 +8,7 @@
 </head>
 
 <body>
-    <script src="https://www.paypal.com/sdk/js?client-id=AZtCEjlNFsR7sagb40kBOr-K61purCS5n6kAHnhCOEAHwt3G24ZfJYYQTbIiKRdilkfYAriQsY5y8PbJ&vault=true&intent=subscription">
+    <script src="https://www.paypal.com/sdk/js?client-id=CLIENT_ID&vault=true&intent=subscription">
     </script>
 
     <div id="paypal-button-container"></div>
@@ -17,7 +17,7 @@
         paypal.Buttons({
             createSubscription: function(data, actions) {
                 return actions.subscription.create({
-                    'plan_id': 'P-7VP04490R1455802CMDA4ADQ' // Creates the subscription
+                    'plan_id': 'PLAN_ID' // Creates the subscription
                 });
             },
             onApprove: function(data, actions) {
