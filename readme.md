@@ -14,5 +14,8 @@ alert message should appear saying "Payment success!"
 
 
 Thank you,
+
+
+Author:- Sachin Muksha
 Happy Coding
 "# paypal-node" 
